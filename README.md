@@ -1,70 +1,87 @@
-# HUMANITI AI — Class Quality Evaluator
+# AI Class Quality Evaluator
 
-A small Streamlit prototype for assessing online-class quality from a timestamped WebVTT transcript. It returns a four-level rating (Poor, Average, Good, Excellent), rubric scores, evidence, strengths, improvement suggestions, confidence, and limitations.
+An AI-assisted prototype for evaluating online class quality using timestamped transcript evidence and a structured teaching-quality rubric.
 
-## Important scope and privacy notes
+## Overview
 
-- The current prototype **analyses transcript text**, not raw video/audio automatically.
-- It does not independently verify lighting, teacher visibility, vocal energy, or facial expressions. Add only observations you have actually verified.
-- The HUMANITI AI brief says recordings must remain confidential and may only be processed by services permitted by the organiser, especially where children are identifiable.
-- The app defaults to local, keyword-based baseline mode. OpenAI mode sends transcript text to the configured API; use it only if the organiser permits that service.
-- Do not upload confidential recordings or transcripts to a public repository. `.gitignore` excludes media/transcript files.
-- The keyword baseline is deliberately labelled low-confidence and is not a validated classifier.
+I built this project to explore how AI can help identify strengths and areas for improvement in online teaching. The evaluator organizes feedback into six dimensions:
 
-## Run locally
+- Student Interaction & Inclusion — 25%
+- Rapport & Class Opening/Closing — 20%
+- Teaching Clarity & Structure — 20%
+- Learning Support & Follow-through — 15%
+- Audio/Technical Quality — 10%
+- Visual Setup & Teacher Visibility — 10%
 
-Python 3.10+ recommended.
+The application presents a four-level class-quality rating: **Poor, Average, Good, or Excellent**, along with rubric scores and supporting observations.
 
-```bash
-python -m venv .venv
-# Windows:
-.venv\Scripts\activate
-# macOS/Linux:
-source .venv/bin/activate
-pip install -r requirements.txt
-streamlit run app.py
-```
+## How It Works
 
-Upload a `.vtt` transcript exported for a class, or paste transcript text.
+1. Provide a WebVTT (`.vtt`) transcript or paste transcript text into the Streamlit interface.
+2. The application parses timestamped transcript segments.
+3. The evaluator analyzes available transcript evidence and generates a provisional quality assessment.
+4. The results include rubric scores, strengths, improvement suggestions, and assessment limitations.
 
-## Enable AI assessment (only if permitted)
+The current working baseline uses keyword-based indicators. The project also includes an OpenAI API analysis option. Any external API must be used only when permitted by the recording organiser.
 
-Set an API key in your environment; never hard-code it.
+## Technology Stack
 
-Windows PowerShell:
-```powershell
-$env:OPENAI_API_KEY="your-key"
-$env:OPENAI_MODEL="gpt-4.1-mini"
-streamlit run app.py
-```
+- Python
+- Streamlit
+- WebVTT transcript parsing
+- JSON-based assessment output
+- Optional OpenAI API integration
 
-macOS/Linux:
-```bash
-export OPENAI_API_KEY="your-key"
-export OPENAI_MODEL="gpt-4.1-mini"
-streamlit run app.py
-```
+## Run Locally
 
-Then select **AI analysis (OpenAI API)** in the sidebar. In hosted deployments, store secrets in the platform's secret manager, not in source code.
+**Requirements:** Python 3.10 or later.
 
-## Suggested validation before submission
+1. Clone the repository:
 
-1. Run the app with at least one transcript from each labelled category.
-2. Compare ratings and evidence against the organiser's feedback notes.
-3. Review false positives caused by transcription errors, chess-specific terms, language differences, and missing class segments.
-4. Keep a record of what failed and what you changed.
-5. If you have permission to analyse audio/video, add and test those modalities before claiming multimodal assessment.
-6. Test with a recording not used during development, as the brief says evaluators will do.
+   ```bash
+   git clone https://github.com/Mubeenashaik7/ai-class-quality-evaluator.git
+   cd ai-class-quality-evaluator
+   ```
 
-## Rubric dimensions
+2. Create and activate a virtual environment:
 
-The starting rubric includes student interaction/inclusion, rapport and class structure, teaching clarity, learning support, audio/technical quality, and visual setup. Weights are provisional design choices, not organiser-provided weights. Missing evidence should be marked not observed rather than automatically treated as failure.
+   ```bash
+   python -m venv .venv
+   ```
 
-## Submission checklist
+   Windows PowerShell:
 
-- [ ] Hosted working app link accessible to evaluators
-- [ ] GitHub repository with source and this README
-- [ ] No API keys, confidential recordings, or private transcripts in GitHub
-- [ ] Relevant AI interaction history saved and redacted
-- [ ] Approach note under 300 words
-- [ ] Tested on an unseen recording
+   ```powershell
+   .\.venv\Scripts\Activate.ps1
+   ```
+
+3. Install dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Start the application:
+
+   ```bash
+   python -m streamlit run app.py
+   ```
+
+5. Open the local URL displayed in the terminal.
+
+## Limitations
+
+- The current interface accepts transcript text and WebVTT files; direct video upload and recording-link processing are not implemented in this submitted version.
+- Transcript evidence alone cannot establish actual audio quality, visual setup, teacher visibility, or non-verbal behaviour.
+- Keyword-based results are provisional and have not been validated as a reliable classifier.
+- Assessment quality depends on the completeness and accuracy of the transcript.
+
+## Privacy and Responsible Use
+
+Class recordings and transcripts may contain sensitive information. Use only recordings you are authorised to process, and only services approved by the organiser. Do not commit recordings, transcripts, API keys, or other confidential information to this public repository.
+
+This prototype is intended to support formative teaching feedback, not high-stakes decisions.
+
+## Project Status
+
+This is a working prototype developed to explore rubric-based online class assessment. Further work is needed to validate assessment consistency, support direct recording ingestion, and test the system on unseen recordings.
